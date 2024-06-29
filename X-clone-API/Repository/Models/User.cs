@@ -8,6 +8,7 @@ namespace X_clone_API.Repository.Models;
 
 [Table("User")]
 [Index("Username", Name = "UQ__User__536C85E45BB67E80", IsUnique = true)]
+[Index("Email", Name = "UQ__User__A9D10534ABE7954E", IsUnique = true)]
 public partial class User
 {
     [StringLength(50)]
@@ -25,7 +26,7 @@ public partial class User
     public DateOnly Birthday { get; set; }
 
     [Column(TypeName = "image")]
-    public byte[]? ProfilePicute { get; set; }
+    public byte[]? ProfilePicture { get; set; }
 
     [Column(TypeName = "image")]
     public byte[]? CoverPicture { get; set; }

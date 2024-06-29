@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using X_clone_API.Repository.Models;
 using X_clone_API.Repository;
+using System.Globalization;
 
 namespace X_clone_API.Controllers
 {
@@ -17,54 +18,53 @@ namespace X_clone_API.Controllers
             _context = context;
         }
 
-
         // ADD NEW USER
         [HttpPost]
-        public async Task<IActionResult> AddUser(string email, string name, string username, string birthday)
+        public async Task<IActionResult> AddUser(string email, string name, string username, string birthday, string? bio = null, IFormFile? profilePicture = null, IFormFile? coverPicture = null)
         {
-            if (!DateOnly.TryParse(birthday, out DateOnly parsedBirthday))
-            {
-                return BadRequest("Invalid date format for birthday.");
-            }
-
-            //date format "yyyy-mm-dd"
-
-            var user = new User { Email = email, Name = name, Username = username, Birthday = parsedBirthday };
-            if(user == null)
+            
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(birthday))
             {
                 return BadRequest();
             }
 
+            if (!DateOnly.TryParseExact(birthday, "yyyy-MM-dd", null, DateTimeStyles.None, out DateOnly parsedBirthday))
+            {
+                return BadRequest("Invalid date format for birthday. Use 'yyyy-MM-dd'.");
+            }
+
+            var user = new User { 
+                Email = email, 
+                Name = name, 
+                Username = username, 
+                Birthday = parsedBirthday, 
+                Bio = bio ?? string.Empty,
+                NoFollowers = 0,
+                NoFollowing = 0,
+            };
+
+            if (profilePicture != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await profilePicture.CopyToAsync(memoryStream);
+                    user.ProfilePicture = memoryStream.ToArray();
+                }
+            }
+            if (coverPicture != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await coverPicture.CopyToAsync(memoryStream);
+                    user.CoverPicture = memoryStream.ToArray();
+                }
+            }
+
             _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
-        // Get Profile Picture
-        [HttpGet("{username}/profile-picture")]
-        public async Task<IActionResult> GetProfilePicture(string username)
-        {
-            var user = await _context.Users.FindAsync(username);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return File(user.ProfilePicute, "image/jpeg"); // Assuming the image is in jpeg format
-        }
-
-        // Get Cover Picture
-        [HttpGet("{username}/cover-picture")]
-        public async Task<IActionResult> GetCoverPicture(string username)
-        {
-            var user = await _context.Users.FindAsync(username);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return File(user.CoverPicture, "image/jpeg"); // Assuming the image is in jpeg format
-        }
 
         // Update Profile Picture
         [HttpPut("{username}/profile-picture")]
@@ -79,7 +79,7 @@ namespace X_clone_API.Controllers
             using (var memoryStream = new MemoryStream())
             {
                 await profilePicture.CopyToAsync(memoryStream);
-                user.ProfilePicute = memoryStream.ToArray();
+                user.ProfilePicture = memoryStream.ToArray();
             }
 
             await _context.SaveChangesAsync();
@@ -116,9 +116,9 @@ namespace X_clone_API.Controllers
             if (user == null)
             {
                 return NotFound();
-            }
+            }   
 
-            user.ProfilePicute = null;
+            user.ProfilePicture = null;
             await _context.SaveChangesAsync();
 
             return NoContent();
