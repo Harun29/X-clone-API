@@ -32,6 +32,9 @@ public partial class Post
     [InverseProperty("PostRepostedNavigation")]
     public virtual ICollection<Repost> Reposts { get; set; } = new List<Repost>();
 
+    [InverseProperty("PostSavedNavigation")]
+    public virtual ICollection<Saved> Saveds { get; set; } = new List<Saved>();
+
     [ForeignKey("UserPosted")]
     [InverseProperty("Posts")]
     public virtual User UserPostedNavigation { get; set; } = null!;
