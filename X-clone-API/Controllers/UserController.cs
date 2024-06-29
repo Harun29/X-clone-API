@@ -22,7 +22,7 @@ namespace X_clone_API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUser(string email, string name, string username, string birthday, string? bio = null, IFormFile? profilePicture = null, IFormFile? coverPicture = null)
         {
-            
+
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(birthday))
             {
                 return BadRequest();
@@ -33,11 +33,11 @@ namespace X_clone_API.Controllers
                 return BadRequest("Invalid date format for birthday. Use 'yyyy-MM-dd'.");
             }
 
-            var user = new User { 
-                Email = email, 
-                Name = name, 
-                Username = username, 
-                Birthday = parsedBirthday, 
+            var user = new User {
+                Email = email,
+                Name = name,
+                Username = username,
+                Birthday = parsedBirthday,
                 Bio = bio ?? string.Empty,
                 NoFollowers = 0,
                 NoFollowing = 0,
@@ -63,6 +63,18 @@ namespace X_clone_API.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+        // get user
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetUser([FromRoute] string username) 
+        {   
+            var user = _context.Users.Find(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
 
