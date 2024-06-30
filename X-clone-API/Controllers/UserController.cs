@@ -19,7 +19,7 @@ namespace X_clone_API.Controllers
         }
 
         // ADD NEW USER
-        [HttpPost]
+        [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser(string email, string name, string username, string birthday, string? bio = null, IFormFile? profilePicture = null, IFormFile? coverPicture = null)
         {
 
@@ -66,7 +66,7 @@ namespace X_clone_API.Controllers
         }
 
         // get user
-        [HttpGet("{username}")]
+        [HttpGet("GetUser/{username}")]
         public async Task<IActionResult> GetUser([FromRoute] string username) 
         {   
             var user = await _context.Users.FindAsync(username);
@@ -78,8 +78,8 @@ namespace X_clone_API.Controllers
         }
 
         // update fields
-        [HttpPut]
-        public async Task<IActionResult> UpdateUser(string username, string? newUsername, string? email, string? name, string? birthday, string? bio)
+        [HttpPut("UpdateUser/{username}")]
+        public async Task<IActionResult> UpdateUser([FromRoute]string username, string? newUsername, string? email, string? name, string? birthday, string? bio)
         {
             var user = await _context.Users.FindAsync(username);
             if (username == null)
