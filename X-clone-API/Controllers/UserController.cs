@@ -82,27 +82,44 @@ namespace X_clone_API.Controllers
         public async Task<IActionResult> UpdateUser(string username, string? newUsername, string? email, string? name, string? birthday, string? bio)
         {
             var user = await _context.Users.FindAsync(username);
-            if (user == null)
+            if (username == null)
             {
                 return BadRequest();
             }
-            var usersId = user.UserId;
-
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(newUsername) || string.IsNullOrEmpty(birthday) || string.IsNullOrEmpty(bio))
+            if(user == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            if (!DateOnly.TryParseExact(birthday, "yyyy-MM-dd", null, DateTimeStyles.None, out DateOnly parsedBirthday))
+            if(!string.IsNullOrEmpty(newUsername))
             {
-                return BadRequest("Invalid date format for birthday. Use 'yyyy-MM-dd'.");
+                user.Username = newUsername;
+            }
+            if (!string.IsNullOrEmpty(email))
+            {
+                user.Email = email;
+            }
+            if(!string.IsNullOrEmpty(name))
+            {
+                user.Name = name;
+            }
+            if(!string.IsNullOrEmpty(birthday))
+            {
+                if (!DateOnly.TryParseExact(birthday, "yyyy-MM-dd", null, DateTimeStyles.None, out DateOnly parsedBirthday))
+                {
+                    return BadRequest("Invalid date format for birthday. Use 'yyyy-MM-dd'.");
+                }
+                user.Birthday = parsedBirthday;
+            }
+            if (!string.IsNullOrEmpty(bio))
+            {
+                user.Bio = bio;
             }
 
-            
-            
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
 
-            return Ok();
-
+            return Ok($"Updated user with username: {username}");
         }
 
 
