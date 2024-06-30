@@ -15,9 +15,7 @@ public partial class Repost
 
     public int PostReposted { get; set; }
 
-    [StringLength(50)]
-    [Unicode(false)]
-    public string UserReposted { get; set; } = null!;
+    public int UserReposted { get; set; }
 
     [ForeignKey("PostReposted")]
     [InverseProperty("Reposts")]

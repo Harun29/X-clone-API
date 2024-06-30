@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace X_clone_API.Repository.Models;
 
 [Table("User")]
+[Index("Username", Name = "UQ__User__536C85E433E4F32F", IsUnique = true)]
 [Index("Username", Name = "UQ__User__536C85E45BB67E80", IsUnique = true)]
 [Index("Email", Name = "UQ__User__A9D10534ABE7954E", IsUnique = true)]
 public partial class User
@@ -15,7 +16,6 @@ public partial class User
     [Unicode(false)]
     public string Name { get; set; } = null!;
 
-    [Key]
     [StringLength(50)]
     [Unicode(false)]
     public string Username { get; set; } = null!;
@@ -38,6 +38,10 @@ public partial class User
     [StringLength(50)]
     [Unicode(false)]
     public string Email { get; set; } = null!;
+
+    [Key]
+    [Column("UserID")]
+    public int UserId { get; set; }
 
     [InverseProperty("UserCommentedNavigation")]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

@@ -69,12 +69,40 @@ namespace X_clone_API.Controllers
         [HttpGet("{username}")]
         public async Task<IActionResult> GetUser([FromRoute] string username) 
         {   
-            var user = _context.Users.Find(username);
+            var user = await _context.Users.FindAsync(username);
             if (user == null)
             {
                 return NotFound();
             }
             return Ok(user);
+        }
+
+        // update fields
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(string username, string? newUsername, string? email, string? name, string? birthday, string? bio)
+        {
+            var user = await _context.Users.FindAsync(username);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            var usersId = user.UserId;
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(newUsername) || string.IsNullOrEmpty(birthday) || string.IsNullOrEmpty(bio))
+            {
+                return BadRequest();
+            }
+
+            if (!DateOnly.TryParseExact(birthday, "yyyy-MM-dd", null, DateTimeStyles.None, out DateOnly parsedBirthday))
+            {
+                return BadRequest("Invalid date format for birthday. Use 'yyyy-MM-dd'.");
+            }
+
+            
+            
+
+            return Ok();
+
         }
 
 

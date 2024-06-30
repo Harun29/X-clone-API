@@ -12,13 +12,9 @@ public partial class Follower
     [Column("FollowersID")]
     public int FollowersId { get; set; }
 
-    [StringLength(50)]
-    [Unicode(false)]
-    public string UserFollowing { get; set; } = null!;
+    public int UserFollowing { get; set; }
 
-    [StringLength(50)]
-    [Unicode(false)]
-    public string UserFollowed { get; set; } = null!;
+    public int UserFollowed { get; set; }
 
     [ForeignKey("UserFollowed")]
     [InverseProperty("FollowerUserFollowedNavigations")]

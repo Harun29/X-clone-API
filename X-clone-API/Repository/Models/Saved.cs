@@ -15,9 +15,7 @@ public partial class Saved
 
     public int PostSaved { get; set; }
 
-    [StringLength(50)]
-    [Unicode(false)]
-    public string UserSaved { get; set; } = null!;
+    public int UserSaved { get; set; }
 
     [ForeignKey("PostSaved")]
     [InverseProperty("Saveds")]

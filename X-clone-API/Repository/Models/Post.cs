@@ -22,9 +22,7 @@ public partial class Post
 
     public int? NoReposts { get; set; }
 
-    [StringLength(50)]
-    [Unicode(false)]
-    public string UserPosted { get; set; } = null!;
+    public int UserPosted { get; set; }
 
     [InverseProperty("PostCommentedNavigation")]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

@@ -24,9 +24,7 @@ public partial class Comment
 
     public int PostCommented { get; set; }
 
-    [StringLength(50)]
-    [Unicode(false)]
-    public string UserCommented { get; set; } = null!;
+    public int UserCommented { get; set; }
 
     [ForeignKey("PostCommented")]
     [InverseProperty("Comments")]

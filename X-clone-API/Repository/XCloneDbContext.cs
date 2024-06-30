@@ -44,7 +44,7 @@ public partial class XCloneDbContext : DbContext
 
             entity.HasOne(d => d.UserCommentedNavigation).WithMany(p => p.Comments)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Comment__UserCom__3D5E1FD2");
+                .HasConstraintName("FK_UserCommented");
         });
 
         modelBuilder.Entity<Follower>(entity =>
@@ -53,11 +53,11 @@ public partial class XCloneDbContext : DbContext
 
             entity.HasOne(d => d.UserFollowedNavigation).WithMany(p => p.FollowerUserFollowedNavigations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Followers__UserF__44FF419A");
+                .HasConstraintName("FK_UserFollowed");
 
             entity.HasOne(d => d.UserFollowingNavigation).WithMany(p => p.FollowerUserFollowingNavigations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Followers__UserF__440B1D61");
+                .HasConstraintName("FK_UserFollowing");
         });
 
         modelBuilder.Entity<Post>(entity =>
@@ -66,7 +66,7 @@ public partial class XCloneDbContext : DbContext
 
             entity.HasOne(d => d.UserPostedNavigation).WithMany(p => p.Posts)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Post__Username__398D8EEE");
+                .HasConstraintName("FK_UserPosted");
         });
 
         modelBuilder.Entity<Repost>(entity =>
@@ -79,7 +79,7 @@ public partial class XCloneDbContext : DbContext
 
             entity.HasOne(d => d.UserRepostedNavigation).WithMany(p => p.Reposts)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Repost__UserRepo__412EB0B6");
+                .HasConstraintName("FK_UserReposted");
         });
 
         modelBuilder.Entity<Saved>(entity =>
@@ -92,7 +92,12 @@ public partial class XCloneDbContext : DbContext
 
             entity.HasOne(d => d.UserSavedNavigation).WithMany(p => p.Saveds)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Saved__UserSaved__48CFD27E");
+                .HasConstraintName("FK_UserSaved");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.UserId).HasName("PK__User__1788CCAC3205E0BA");
         });
 
         OnModelCreatingPartial(modelBuilder);
