@@ -17,12 +17,14 @@ namespace X_clone_API.Controllers
             _context = context;
         }
 
+        //GET POSTS
+
         //GET POST BY ID
-        [HttpGet("{id}")]
+        [HttpGet("post/{id}")]
         public async Task<IActionResult> GetPost([FromHeader] int postID)
         {
             var post = _context.Posts.Find(postID);
-            if(post == null)
+            if (post == null)
             {
                 return NotFound();
             }
@@ -30,11 +32,11 @@ namespace X_clone_API.Controllers
         }
 
         //GET POSTS BY CURRENT USER
-        [HttpGet("usersPosts")]
-        public async Task<IActionResult> GetUsersPost([FromBody] string username)
+        [HttpGet("posts/{username}")]
+        public async Task<IActionResult> GetUsersPost([FromHeader] string username)
         {
             var user = await _context.Users.FindAsync(username);
-            if(user == null)
+            if (user == null)
             {
                 return NotFound();
             }
@@ -44,8 +46,8 @@ namespace X_clone_API.Controllers
 
 
         //GET POSTS BY USERS THAT CURRENT USER IS FOLLOWING
-        [HttpGet("Following/{username}")]
-        public async Task<IActionResult> GetPostsByFollowing(string username)
+        [HttpGet("followingPosts/{username}")]
+        public async Task<IActionResult> GetPostsByFollowing([FromHeader] string username)
         {
             // Get the current user ID from the username
             var user = await _context.Users
@@ -69,6 +71,27 @@ namespace X_clone_API.Controllers
 
             return Ok(posts);
         }
+
+        //CREATE POST
+
+        //DELETE POST
+
+        [HttpDelete("{PostID}")]
+        public async Task<IActionResult> DeletePost([FromHeader] int PostID)
+        {
+            var post = _context.Posts.Find(PostID);
+            if(post == null)
+            {
+                return BadRequest();
+            }
+
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            return Ok($"Post with the id of {PostID} was deleted!")
+        }
+
+        //EDIT POST
 
 
     }
