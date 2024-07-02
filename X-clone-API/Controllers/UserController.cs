@@ -69,7 +69,7 @@ namespace X_clone_API.Controllers
         [HttpGet("GetUser/{username}")]
         public async Task<IActionResult> GetUser([FromRoute] string username) 
         {   
-            var user = await _context.Users.FindAsync(username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
             {
                 return NotFound();
@@ -81,7 +81,13 @@ namespace X_clone_API.Controllers
         [HttpPut("UpdateUser/{username}")]
         public async Task<IActionResult> UpdateUser([FromRoute]string username, string? newUsername, string? email, string? name, string? birthday, string? bio)
         {
-            var user = await _context.Users.FindAsync(username);
+            if (string.IsNullOrEmpty(username))
+            {
+                return BadRequest();
+            }
+
+            var user = await _context.Users
+                                     .FirstOrDefaultAsync(u => u.Username == username);
             if (username == null)
             {
                 return BadRequest();
@@ -119,7 +125,7 @@ namespace X_clone_API.Controllers
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return Ok($"Updated user with username: {username}");
+            return Ok($"Updated user with username: {newUsername}");
         }
 
 
@@ -127,7 +133,7 @@ namespace X_clone_API.Controllers
         [HttpPut("{username}/profile-picture")]
         public async Task<IActionResult> UpdateProfilePicture(string username, [FromForm] IFormFile profilePicture)
         {
-            var user = await _context.Users.FindAsync(username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
             {
                 return NotFound();
@@ -148,7 +154,7 @@ namespace X_clone_API.Controllers
         [HttpPut("{username}/cover-picture")]
         public async Task<IActionResult> UpdateCoverPicture(string username, [FromForm] IFormFile coverPicture)
         {
-            var user = await _context.Users.FindAsync(username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
             {
                 return NotFound();
@@ -169,7 +175,7 @@ namespace X_clone_API.Controllers
         [HttpDelete("{username}/profile-picture")]
         public async Task<IActionResult> DeleteProfilePicture(string username)
         {
-            var user = await _context.Users.FindAsync(username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
             {
                 return NotFound();
@@ -185,7 +191,7 @@ namespace X_clone_API.Controllers
         [HttpDelete("{username}/cover-picture")]
         public async Task<IActionResult> DeleteCoverPicture(string username)
         {
-            var user = await _context.Users.FindAsync(username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
             {
                 return NotFound();
