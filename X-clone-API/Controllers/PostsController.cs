@@ -76,10 +76,10 @@ namespace X_clone_API.Controllers
 
         //DELETE POST
 
-        [HttpDelete("{PostID}")]
-        public async Task<IActionResult> DeletePost([FromHeader] int PostID)
+        [HttpDelete("deletePost/{postID}")]
+        public async Task<IActionResult> DeletePost([FromHeader] int postID)
         {
-            var post = _context.Posts.Find(PostID);
+            var post = _context.Posts.Find(postID);
             if(post == null)
             {
                 return BadRequest();
@@ -88,11 +88,30 @@ namespace X_clone_API.Controllers
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
 
-            return Ok($"Post with the id of {PostID} was deleted!")
+            return Ok($"Post with the id of {postID} was deleted!");
         }
 
         //EDIT POST
 
+        [HttpPut("update/{postID}")]
+        public async Task<IActionResult> UpdatePost([FromHeader] int postID, [FromBody] int usersId, string newContent) 
+        {
+            var post = _context.Posts.Find(postID);
+            if(post == null)
+            {
+                return BadRequest();
+            }
+            if(usersId != post.UserPosted) 
+            {
+                return BadRequest();
+            }
+
+            post.PostContent = newContent;
+            _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
+
+            return Ok($"Updated post with the id of {postID}!");
+        }
 
     }
 }
