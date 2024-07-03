@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using X_clone_API.Repository;
+using X_clone_API.Repository.Models;
 
 namespace X_clone_API.Controllers
 {
@@ -74,6 +75,25 @@ namespace X_clone_API.Controllers
         }
 
         //CREATE POST
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreatePost([FromBody] int userPostedID, string content)
+        {
+            if (string.IsNullOrEmpty(content) || userPostedID == null)
+            {
+                return BadRequest();
+            }
+            var post = new Post
+            {
+                UserPosted = userPostedID,
+                PostContent = content
+            };
+
+            _context.Posts.Add(post);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
 
         //DELETE POST
 
