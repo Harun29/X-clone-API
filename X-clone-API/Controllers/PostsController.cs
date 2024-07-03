@@ -67,6 +67,7 @@ namespace X_clone_API.Controllers
             // Get the posts by the users the current user is following
             var posts = await _context.Posts
                 .Where(p => followingUserIds.Contains(p.UserPosted))
+                .Include(p => p.UserPostedNavigation)
                 .ToListAsync();
 
             return Ok(posts);

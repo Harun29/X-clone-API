@@ -52,6 +52,9 @@ public partial class User
     [InverseProperty("UserFollowingNavigation")]
     public virtual ICollection<Follower> FollowerUserFollowingNavigations { get; set; } = new List<Follower>();
 
+    [InverseProperty("UserLikedNavigation")]
+    public virtual ICollection<Liked> Likeds { get; set; } = new List<Liked>();
+
     [InverseProperty("UserPostedNavigation")]
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 

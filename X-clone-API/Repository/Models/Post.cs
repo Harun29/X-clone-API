@@ -27,6 +27,9 @@ public partial class Post
     [InverseProperty("PostCommentedNavigation")]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
+    [InverseProperty("PostLikedNavigation")]
+    public virtual ICollection<Liked> Likeds { get; set; } = new List<Liked>();
+
     [InverseProperty("PostRepostedNavigation")]
     public virtual ICollection<Repost> Reposts { get; set; } = new List<Repost>();
 

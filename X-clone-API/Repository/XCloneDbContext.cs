@@ -20,6 +20,8 @@ public partial class XCloneDbContext : DbContext
 
     public virtual DbSet<Follower> Followers { get; set; }
 
+    public virtual DbSet<Liked> Likeds { get; set; }
+
     public virtual DbSet<Post> Posts { get; set; }
 
     public virtual DbSet<Repost> Reposts { get; set; }
@@ -58,6 +60,19 @@ public partial class XCloneDbContext : DbContext
             entity.HasOne(d => d.UserFollowingNavigation).WithMany(p => p.FollowerUserFollowingNavigations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserFollowing");
+        });
+
+        modelBuilder.Entity<Liked>(entity =>
+        {
+            entity.HasKey(e => e.LikedId).HasName("PK__Liked__A79178387F7B74F1");
+
+            entity.HasOne(d => d.PostLikedNavigation).WithMany(p => p.Likeds)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Liked__PostLiked__5DCAEF64");
+
+            entity.HasOne(d => d.UserLikedNavigation).WithMany(p => p.Likeds)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Liked__PostLiked__5CD6CB2B");
         });
 
         modelBuilder.Entity<Post>(entity =>
