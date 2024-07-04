@@ -6,11 +6,11 @@ namespace X_clone_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SavedController : ControllerBase
+    public class SaveController : ControllerBase
     {
         private readonly XCloneDbContext _context;
 
-        public SavedController(XCloneDbContext context)
+        public SaveController(XCloneDbContext context)
         {
             _context = context;
         }
