@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using X_clone_API.Repository;
 using X_clone_API.Repository.Models;
 
@@ -33,17 +34,34 @@ namespace X_clone_API.Controllers
         }
 
         //GET POSTS BY CURRENT USER
-        [HttpGet("posts/{username}")]
-        public async Task<IActionResult> GetUsersPost([FromHeader] string username)
+        [HttpGet("posts")]
+        public async Task<IActionResult> GetUsersPosts([FromHeader] string username)
         {
-            var user = await _context.Users.FindAsync(username);
+            var user = await _context.Users
+                .Include(u => u.Posts)
+                .Include(u => u.Reposts)
+                .FirstOrDefaultAsync(u => u.Username == username);
+
             if (user == null)
             {
                 return NotFound();
             }
-            var posts = user.Posts.ToList();
-            return Ok(posts);
+
+            var allPosts = user.Posts.ToList();
+
+            foreach(Repost re in user.Reposts)
+            {
+                var post = _context.Posts.Find(re.PostReposted);
+                if(post == null)
+                {
+                    return BadRequest();
+                }
+                allPosts.Add(post);
+            }
+
+            return Ok(allPosts);
         }
+
 
 
         //GET POSTS BY USERS THAT CURRENT USER IS FOLLOWING

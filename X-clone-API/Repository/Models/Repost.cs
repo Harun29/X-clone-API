@@ -17,6 +17,10 @@ public partial class Repost
 
     public int UserReposted { get; set; }
 
+    public int? NoLikes { get; set; }
+
+    public int? NoComments { get; set; }
+
     [ForeignKey("PostReposted")]
     [InverseProperty("Reposts")]
     public virtual Post PostRepostedNavigation { get; set; } = null!;
