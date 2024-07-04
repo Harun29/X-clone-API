@@ -79,7 +79,7 @@ namespace X_clone_API.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreatePost([FromBody] int userPostedID, string content)
         {
-            if (string.IsNullOrEmpty(content) || userPostedID == null)
+            if (string.IsNullOrEmpty(content))
             {
                 return BadRequest();
             }

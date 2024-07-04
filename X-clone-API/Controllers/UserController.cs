@@ -77,6 +77,20 @@ namespace X_clone_API.Controllers
             return Ok(user);
         }
 
+        //get saved posts by user
+        [HttpGet]
+        public async Task<IActionResult> GetSavedPosts(int userId)
+        {
+            var user = _context.Users.Find(userId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            var saved = user.Saveds.ToList();
+
+            return Ok(saved);
+        }
+
         // update fields
         [HttpPut("UpdateUser/{username}")]
         public async Task<IActionResult> UpdateUser([FromRoute]string username, string? newUsername, string? email, string? name, string? birthday, string? bio)
