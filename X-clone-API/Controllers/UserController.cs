@@ -91,6 +91,21 @@ namespace X_clone_API.Controllers
             return Ok(saved);
         }
 
+        //get liked posts by user
+        [HttpGet]
+        public async Task<IActionResult> GetLikedPosts(int userId)
+        {
+            var user = _context.Users.Find(userId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            var likes = user.Likeds.ToList();
+
+            return Ok(likes);
+        }
+
+
         // update fields
         [HttpPut("UpdateUser/{username}")]
         public async Task<IActionResult> UpdateUser([FromRoute]string username, string? newUsername, string? email, string? name, string? birthday, string? bio)

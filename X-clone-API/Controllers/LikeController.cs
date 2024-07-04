@@ -33,7 +33,7 @@ namespace X_clone_API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteSaved(int likedId)
+        public async Task<IActionResult> DeleteLiked(int likedId)
         {
             var liked = _context.Likeds.Find(likedId);
             if (liked == null)
