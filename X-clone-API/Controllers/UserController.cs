@@ -68,8 +68,9 @@ namespace X_clone_API.Controllers
         // get user
         [HttpGet("GetUser/{username}")]
         public async Task<IActionResult> GetUser([FromRoute] string username) 
-        {   
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
             {
                 return NotFound();
@@ -78,8 +79,8 @@ namespace X_clone_API.Controllers
         }
 
         //get saved posts by user
-        [HttpGet]
-        public async Task<IActionResult> GetSavedPosts(int userId)
+        [HttpGet("GetSavedPosts")]
+        public IActionResult GetSavedPosts(int userId)
         {
             var user = _context.Users.Find(userId);
             if (user == null)
@@ -92,8 +93,8 @@ namespace X_clone_API.Controllers
         }
 
         //get liked posts by user
-        [HttpGet]
-        public async Task<IActionResult> GetLikedPosts(int userId)
+        [HttpGet("GetLikedPosts")]
+        public IActionResult GetLikedPosts(int userId)
         {
             var user = _context.Users.Find(userId);
             if (user == null)
@@ -180,7 +181,7 @@ namespace X_clone_API.Controllers
         }
 
         // Update Cover Picture
-        [HttpPut("{username}/cover-picture")]
+        [HttpPut("{username}/CoverPicture")]
         public async Task<IActionResult> UpdateCoverPicture(string username, [FromForm] IFormFile coverPicture)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
@@ -201,7 +202,7 @@ namespace X_clone_API.Controllers
         }
 
         // Delete Profile Picture
-        [HttpDelete("{username}/profile-picture")]
+        [HttpDelete("{username}/ProfilePicture")]
         public async Task<IActionResult> DeleteProfilePicture(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
@@ -217,7 +218,7 @@ namespace X_clone_API.Controllers
         }
 
         // Delete Cover Picture
-        [HttpDelete("{username}/cover-picture")]
+        [HttpDelete("{username}/CoverPicture")]
         public async Task<IActionResult> DeleteCoverPicture(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);

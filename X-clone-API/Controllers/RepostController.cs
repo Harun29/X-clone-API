@@ -16,7 +16,7 @@ namespace X_clone_API.Controllers
                 _context = context;
         }
 
-        [HttpPost("add-repost")]
+        [HttpPost("AddRepost")]
         public async Task<IActionResult> PostRepost(int postReposted,[FromBody] int userReposted)
         {
             var repost = new Repost
@@ -30,7 +30,7 @@ namespace X_clone_API.Controllers
             return Ok();
         }
 
-        [HttpDelete("delete-repost")]
+        [HttpDelete("DeleteRepost")]
         public async Task<IActionResult> DeleteRepost([FromBody] int repostId)
         {
             var repost = _context.Reposts.Find(repostId);

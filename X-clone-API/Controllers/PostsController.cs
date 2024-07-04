@@ -22,8 +22,8 @@ namespace X_clone_API.Controllers
         //GET POSTS
 
         //GET POST BY ID
-        [HttpGet("post/{id}")]
-        public async Task<IActionResult> GetPost([FromHeader] int postID)
+        [HttpGet("post/{postID}")]
+        public IActionResult GetPost([FromRoute] int postID)
         {
             var post = _context.Posts.Find(postID);
             if (post == null)
@@ -35,7 +35,7 @@ namespace X_clone_API.Controllers
 
         //GET POSTS BY CURRENT USER
         [HttpGet("posts")]
-        public async Task<IActionResult> GetUsersPosts([FromHeader] string username)
+        public async Task<IActionResult> GetUsersPosts(string username)
         {
             var user = await _context.Users
                 .Include(u => u.Posts)
@@ -66,7 +66,7 @@ namespace X_clone_API.Controllers
 
         //GET POSTS BY USERS THAT CURRENT USER IS FOLLOWING
         [HttpGet("followingPosts/{username}")]
-        public async Task<IActionResult> GetPostsByFollowing([FromHeader] string username)
+        public async Task<IActionResult> GetPostsByFollowing([FromRoute] string username)
         {
             // Get the current user ID from the username
             var user = await _context.Users
@@ -127,7 +127,7 @@ namespace X_clone_API.Controllers
         //DELETE POST
 
         [HttpDelete("deletePost/{postID}")]
-        public async Task<IActionResult> DeletePost([FromHeader] int postID)
+        public async Task<IActionResult> DeletePost([FromRoute] int postID)
         {
             var post = _context.Posts.Find(postID);
             if(post == null)
@@ -144,7 +144,7 @@ namespace X_clone_API.Controllers
         //EDIT POST
 
         [HttpPut("update/{postID}")]
-        public async Task<IActionResult> UpdatePost([FromHeader] int postID, [FromBody] int usersId, string newContent) 
+        public async Task<IActionResult> UpdatePost([FromRoute] int postID, [FromBody] int usersId, string newContent) 
         {
             var post = _context.Posts.Find(postID);
             if(post == null)

@@ -16,7 +16,7 @@ namespace X_clone_API.Controllers
             _context = context;
         }
 
-        [HttpPost("add-follower")]
+        [HttpPost("AddFollower")]
         public async Task<IActionResult> AddFollower(int userId, int followingId)
         {
             var follower = new Follower
@@ -31,7 +31,7 @@ namespace X_clone_API.Controllers
             return Ok();
         }
 
-        [HttpDelete("remove-follower")]
+        [HttpDelete("RemoveFollower")]
         public async Task<IActionResult> RemoveFollower(int followerId)
         {
             var follower = _context.Followers.Find(followerId);
@@ -39,6 +39,9 @@ namespace X_clone_API.Controllers
             {
                 return BadRequest();
             }
+
+            _context.Followers.Remove(follower);
+            await _context.SaveChangesAsync();
 
             return Ok();
         }
