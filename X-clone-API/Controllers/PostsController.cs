@@ -89,6 +89,17 @@ namespace X_clone_API.Controllers
                 .Include(p => p.UserPostedNavigation)
                 .ToListAsync();
 
+            var reposts = await _context.Reposts
+                .Where(p => followingUserIds.Contains(p.UserReposted))
+                .Include (p => p.PostRepostedNavigation)
+                .ToListAsync();
+
+            foreach (Repost re in reposts)
+            {
+                var post = re.PostRepostedNavigation;
+                posts.Add(post);
+            }
+
             return Ok(posts);
         }
 
