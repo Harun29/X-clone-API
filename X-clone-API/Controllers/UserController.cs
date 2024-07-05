@@ -85,6 +85,7 @@ namespace X_clone_API.Controllers
             var user = _context.Users
                                 .Include(u => u.Saveds)
                                     .ThenInclude(s => s.PostSavedNavigation)
+                                        .ThenInclude(p => p.UserPostedNavigation)
                                 .FirstOrDefault(u => u.UserId == userId);
             if (user == null)
             {
@@ -102,6 +103,7 @@ namespace X_clone_API.Controllers
             var user = _context.Users
                                 .Include(u => u.Likeds)
                                     .ThenInclude(l => l.PostLikedNavigation)
+                                        .ThenInclude(p => p.UserPostedNavigation)
                                 .FirstOrDefault(u => u.UserId == userId);
             if (user == null)
             {
