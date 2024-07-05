@@ -38,9 +38,7 @@ namespace X_clone_API.Controllers
                 Name = name,
                 Username = username,
                 Birthday = parsedBirthday,
-                Bio = bio ?? string.Empty,
-                NoFollowers = 0,
-                NoFollowing = 0,
+                Bio = bio ?? string.Empty
             };
 
             if (profilePicture != null)
