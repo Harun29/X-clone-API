@@ -27,6 +27,12 @@ namespace X_clone_API.Controllers
                 UserLiked = userId
             };
 
+            var checkExisting = _context.Likeds.FirstOrDefault(f => f.UserLiked == userId && f.PostLiked == postId);
+            if (checkExisting != null)
+            {
+                return BadRequest();
+            }
+
             var post = await _context.Posts.FindAsync(postId);
             if (post == null)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace X_clone_API.Repository.Models;
 
@@ -21,6 +22,7 @@ public partial class Repost
 
     public int? NoComments { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("PostReposted")]
     [InverseProperty("Reposts")]
     public virtual Post PostRepostedNavigation { get; set; } = null!;

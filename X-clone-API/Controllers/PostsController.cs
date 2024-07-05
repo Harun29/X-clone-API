@@ -54,11 +54,14 @@ namespace X_clone_API.Controllers
 
             foreach(Repost re in user.Reposts)
             {
-                var post = _context.Posts.Find(re.PostReposted);
+                var post = _context.Posts
+                                    .Include(p => p.UserPostedNavigation)
+                                    .FirstOrDefault(p => p.PostId == re.PostReposted);
                 if(post == null)
                 {
                     return BadRequest();
                 }
+                post.Reposts = [];
                 allPosts.Add(post);
             }
 
@@ -100,6 +103,7 @@ namespace X_clone_API.Controllers
             foreach (Repost re in reposts)
             {
                 var post = re.PostRepostedNavigation;
+                post.Reposts = [];
                 posts.Add(post);
             }
 

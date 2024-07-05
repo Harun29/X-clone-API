@@ -24,6 +24,13 @@ namespace X_clone_API.Controllers
                 PostReposted = postReposted,
                 UserReposted = userReposted
             };
+
+            var checkExisting = _context.Reposts.FirstOrDefault(r => r.PostReposted == postReposted && r.UserReposted == userReposted );
+            if (checkExisting != null)
+            {
+                return BadRequest();
+            }
+
             var post = await _context.Posts.FindAsync(postReposted);
             if(post == null)
             {

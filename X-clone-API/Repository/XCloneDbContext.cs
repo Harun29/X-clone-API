@@ -79,6 +79,10 @@ public partial class XCloneDbContext : DbContext
         {
             entity.HasKey(e => e.PostId).HasName("PK__Post__AA12603864E4CB7E");
 
+            entity.Property(e => e.NoComments).HasDefaultValue(0);
+            entity.Property(e => e.NoLikes).HasDefaultValue(0);
+            entity.Property(e => e.NoReposts).HasDefaultValue(0);
+
             entity.HasOne(d => d.UserPostedNavigation).WithMany(p => p.Posts)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserPosted");

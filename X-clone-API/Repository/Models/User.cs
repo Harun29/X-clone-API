@@ -51,7 +51,7 @@ public partial class User
     [JsonIgnore]
     [InverseProperty("UserFollowedNavigation")]
     public virtual ICollection<Follower> FollowerUserFollowedNavigations { get; set; } = new List<Follower>();
-    
+
     [JsonIgnore]
     [InverseProperty("UserFollowingNavigation")]
     public virtual ICollection<Follower> FollowerUserFollowingNavigations { get; set; } = new List<Follower>();
