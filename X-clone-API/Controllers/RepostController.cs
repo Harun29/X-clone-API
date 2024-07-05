@@ -24,7 +24,14 @@ namespace X_clone_API.Controllers
                 PostReposted = postReposted,
                 UserReposted = userReposted
             };
+            var post = await _context.Posts.FindAsync(postReposted);
+            if(post == null)
+            {
+                return NotFound();
+            }
+            post.NoReposts += 1;
 
+            _context.Posts.Update(post);
             await _context.Reposts.AddAsync(repost);
             await _context.SaveChangesAsync();
             return Ok();
@@ -39,6 +46,16 @@ namespace X_clone_API.Controllers
                 return BadRequest();
             }
 
+            var postReposted = repost.PostReposted;
+
+            var post = await _context.Posts.FindAsync(postReposted);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            post.NoReposts -= 1;
+
+            _context.Posts.Update(post);
             _context.Reposts.Remove(repost);
             await _context.SaveChangesAsync();
 

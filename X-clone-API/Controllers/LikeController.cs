@@ -42,19 +42,21 @@ namespace X_clone_API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteLiked(int postId, int likedId)
+        public async Task<IActionResult> DeleteLiked(int likedId)
         {
             var liked = _context.Likeds.Find(likedId);
             if (liked == null)
             {
                 return BadRequest();
             }
+
+            var postId = liked.PostLiked;
             var post = await _context.Posts.FindAsync(postId);
             if (post == null)
             {
                 return NotFound();
             }
-            post.NoLikes += 1;
+            post.NoLikes -= 1;
 
             _context.Posts.Update(post);
             _context.Likeds.Remove(liked);

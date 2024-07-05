@@ -16,7 +16,7 @@ namespace X_clone_API.Controllers
             _context = context;
         }
 
-        [HttpPost("AddFollower")]
+        [HttpPost("Follow")]
         public async Task<IActionResult> AddFollower(int userId, int followingId)
         {
             var follower = new Follower
@@ -24,6 +24,18 @@ namespace X_clone_API.Controllers
                 UserFollowing = followingId,
                 UserFollowed = userId
             };
+            var user = await _context.Users.FindAsync(userId);
+            var following = await _context.Users.FindAsync(followingId);
+            if(user == null || following == null)
+            {
+                return NotFound();
+            }
+
+            user.NoFollowing += 1;
+            following.NoFollowers += 1;
+
+            _context.Users.Update(user);
+            _context.Users.Update(following);
 
             await _context.Followers.AddAsync(follower);
             await _context.SaveChangesAsync();
@@ -31,7 +43,7 @@ namespace X_clone_API.Controllers
             return Ok();
         }
 
-        [HttpDelete("RemoveFollower")]
+        [HttpDelete("Unfollow")]
         public async Task<IActionResult> RemoveFollower(int followerId)
         {
             var follower = _context.Followers.Find(followerId);
@@ -39,6 +51,21 @@ namespace X_clone_API.Controllers
             {
                 return BadRequest();
             }
+
+            var userId = follower.UserFollowed;
+            var followingId = follower.UserFollowing;
+            var user = await _context.Users.FindAsync(userId);
+            var following = await _context.Users.FindAsync(followingId);
+            if (user == null || following == null)
+            {
+                return NotFound();
+            }
+
+            user.NoFollowing -= 1;
+            following.NoFollowers -= 1;
+
+            _context.Users.Update(user);
+            _context.Users.Update(following);
 
             _context.Followers.Remove(follower);
             await _context.SaveChangesAsync();
