@@ -70,7 +70,7 @@ namespace X_clone_API.Controllers
         public async Task<IActionResult> GetUser([FromRoute] string username) 
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == username);
+                                     .FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
             {
                 return NotFound();
@@ -82,7 +82,10 @@ namespace X_clone_API.Controllers
         [HttpGet("GetSavedPosts")]
         public IActionResult GetSavedPosts(int userId)
         {
-            var user = _context.Users.Find(userId);
+            var user = _context.Users
+                                .Include(u => u.Saveds)
+                                    .ThenInclude(s => s.PostSavedNavigation)
+                                .FirstOrDefault(u => u.UserId == userId);
             if (user == null)
             {
                 return BadRequest();
@@ -96,7 +99,10 @@ namespace X_clone_API.Controllers
         [HttpGet("GetLikedPosts")]
         public IActionResult GetLikedPosts(int userId)
         {
-            var user = _context.Users.Find(userId);
+            var user = _context.Users
+                                .Include(u => u.Likeds)
+                                    .ThenInclude(l => l.PostLikedNavigation)
+                                .FirstOrDefault(u => u.UserId == userId);
             if (user == null)
             {
                 return BadRequest();
@@ -104,6 +110,40 @@ namespace X_clone_API.Controllers
             var likes = user.Likeds.ToList();
 
             return Ok(likes);
+        }
+
+        //get users followers
+        [HttpGet("GetFollowers")]
+        public IActionResult GetFollowers(int userId)
+        {
+            var user = _context.Users
+                                .Include(u => u.FollowerUserFollowedNavigations)
+                                    .ThenInclude(f => f.UserFollowingNavigation)
+                                .FirstOrDefault(u => u.UserId == userId); 
+            if (user == null) 
+            {
+                return BadRequest();
+            }
+
+            var followers = user.FollowerUserFollowedNavigations.ToList();
+            return Ok(followers);
+        }
+
+        //get users following
+        [HttpGet("GetFollowing")]
+        public IActionResult GetFollowing(int userId)
+        {
+            var user = _context.Users
+                                .Include(u => u.FollowerUserFollowingNavigations)
+                                    .ThenInclude(f => f.UserFollowedNavigation)
+                                .FirstOrDefault(u => u.UserId == userId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var following = user.FollowerUserFollowingNavigations.ToList();
+            return Ok(following);
         }
 
 

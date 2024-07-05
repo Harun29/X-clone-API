@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace X_clone_API.Repository.Models;
 
@@ -27,12 +28,15 @@ public partial class Post
     [InverseProperty("PostCommentedNavigation")]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
+    [JsonIgnore]
     [InverseProperty("PostLikedNavigation")]
     public virtual ICollection<Liked> Likeds { get; set; } = new List<Liked>();
 
+    [JsonIgnore]
     [InverseProperty("PostRepostedNavigation")]
     public virtual ICollection<Repost> Reposts { get; set; } = new List<Repost>();
 
+    [JsonIgnore]
     [InverseProperty("PostSavedNavigation")]
     public virtual ICollection<Saved> Saveds { get; set; } = new List<Saved>();
 
