@@ -31,9 +31,8 @@ public partial class XCloneDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer("Data Source=DESKTOP-8T179V2;Initial Catalog=x_clone_db;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-8T179V2;Initial Catalog=x_clone_db;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -114,6 +113,9 @@ public partial class XCloneDbContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.UserId).HasName("PK__User__1788CCAC3205E0BA");
+
+            entity.Property(e => e.NoFollowers).HasDefaultValue(0);
+            entity.Property(e => e.NoFollowing).HasDefaultValue(0);
         });
 
         OnModelCreatingPartial(modelBuilder);
