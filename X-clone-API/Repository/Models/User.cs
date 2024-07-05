@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;  // Add this for JsonIgnore
 
 namespace X_clone_API.Repository.Models
 {
