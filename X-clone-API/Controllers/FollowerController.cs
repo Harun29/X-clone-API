@@ -25,7 +25,7 @@ namespace X_clone_API.Controllers
                 UserFollowed = userId
             };
 
-            await _context.AddAsync(follower);
+            await _context.Followers.AddAsync(follower);
             await _context.SaveChangesAsync();
 
             return Ok();

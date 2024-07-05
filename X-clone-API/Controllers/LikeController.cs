@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using X_clone_API.Repository.Models;
 using X_clone_API.Repository;
+using Microsoft.Extensions.Hosting;
 
 namespace X_clone_API.Controllers
 {
@@ -26,21 +27,36 @@ namespace X_clone_API.Controllers
                 UserLiked = userId
             };
 
+            var post = await _context.Posts.FindAsync(postId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            post.NoLikes += 1;
+
             _context.Likeds.Add(liked);
+            _context.Posts.Update(post);
             await _context.SaveChangesAsync();
 
             return Ok();
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteLiked(int likedId)
+        public async Task<IActionResult> DeleteLiked(int postId, int likedId)
         {
             var liked = _context.Likeds.Find(likedId);
             if (liked == null)
             {
                 return BadRequest();
             }
+            var post = await _context.Posts.FindAsync(postId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            post.NoLikes += 1;
 
+            _context.Posts.Update(post);
             _context.Likeds.Remove(liked);
             await _context.SaveChangesAsync();
             return Ok();
