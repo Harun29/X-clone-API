@@ -25,16 +25,19 @@ namespace X_clone_API.Controllers
         [HttpGet("post/{postID}")]
         public IActionResult GetPost([FromRoute] int postID)
         {
-            var post = _context.Posts.Find(postID);
+            var post = _context.Posts
+                                .Include(p => p.UserPostedNavigation)
+                                .FirstOrDefault(p => p.PostId == postID);
             if (post == null)
             {
                 return NotFound();
             }
+
             return Ok(post);
         }
 
         //GET POSTS BY CURRENT USER
-        [HttpGet("posts")]
+        [HttpGet("posts-by-user")]
         public async Task<IActionResult> GetUsersPosts(string username)
         {
             var user = await _context.Users
