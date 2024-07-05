@@ -19,16 +19,18 @@ namespace X_clone_API.Controllers
         [HttpPost("Follow")]
         public async Task<IActionResult> AddFollower(int userId, int followedId)
         {
+
+            var checkExisting = _context.Followers.FirstOrDefault(f => f.UserFollowing == userId && f.UserFollowed == followedId);
+            if (checkExisting != null)
+            {
+                return BadRequest();
+            }
+
             var follower = new Follower
             {
                 UserFollowing = userId,
                 UserFollowed = followedId
             };
-
-            var checkExisting = _context.Followers.FirstOrDefault(f => f.UserFollowing == userId && f.UserFollowed == followedId);
-            if (checkExisting != null) {
-                return BadRequest();
-            }
 
             var user = await _context.Users.FindAsync(userId);
             var followed = await _context.Users.FindAsync(followedId);
