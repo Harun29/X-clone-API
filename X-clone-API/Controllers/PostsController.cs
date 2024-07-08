@@ -112,8 +112,8 @@ namespace X_clone_API.Controllers
 
         //CREATE POST
 
-        [HttpPost("create")]
-        public async Task<IActionResult> CreatePost([FromBody] int userPostedID, string content)
+        [HttpPost("create/{userId}")]
+        public async Task<IActionResult> CreatePost([FromRoute] int userId,[FromBody] string content)
         {
             if (string.IsNullOrEmpty(content))
             {
@@ -121,7 +121,7 @@ namespace X_clone_API.Controllers
             }
             var post = new Post
             {
-                UserPosted = userPostedID,
+                UserPosted = userId,
                 PostContent = content
             };
 
@@ -151,7 +151,7 @@ namespace X_clone_API.Controllers
         //EDIT POST
 
         [HttpPut("update/{postID}")]
-        public async Task<IActionResult> UpdatePost([FromRoute] int postID, [FromBody] int usersId, string newContent) 
+        public async Task<IActionResult> UpdatePost([FromRoute] int postID, int usersId,[FromBody] string newContent) 
         {
             var post = _context.Posts.Find(postID);
             if(post == null)
