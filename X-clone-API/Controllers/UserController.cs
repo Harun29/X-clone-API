@@ -201,7 +201,7 @@ namespace X_clone_API.Controllers
 
         // Update Profile Picture
         [HttpPut("{username}/profile-picture")]
-        public async Task<IActionResult> UpdateProfilePicture(string username, [FromForm] IFormFile profilePicture)
+        public async Task<IActionResult> UpdateProfilePicture(string username, IFormFile profilePicture)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)

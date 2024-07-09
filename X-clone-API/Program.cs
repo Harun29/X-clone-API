@@ -34,6 +34,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
+app.UseCors(); // Make sure this is placed after UseRouting and before UseAuthorization
+
 app.UseAuthorization();
 
 app.MapControllers();
