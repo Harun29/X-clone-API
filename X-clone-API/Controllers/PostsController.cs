@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.Linq;
 using X_clone_API.Repository;
 using X_clone_API.Repository.Models;
@@ -65,7 +66,9 @@ namespace X_clone_API.Controllers
                 allPosts.Add(post);
             }
 
-            return Ok(allPosts);
+            var orderedPosts = allPosts.OrderByDescending(p => p.PostId).ToList();
+
+            return Ok(orderedPosts);
         }
 
 
@@ -107,7 +110,9 @@ namespace X_clone_API.Controllers
                 posts.Add(post);
             }
 
-            return Ok(posts);
+            var orderedPosts = posts.OrderByDescending(p => p.PostId).ToList();
+
+            return Ok(orderedPosts);
         }
 
         //CREATE POST
