@@ -48,15 +48,14 @@ namespace X_clone_API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteLiked(int likedId)
+        public async Task<IActionResult> DeleteLiked(int userId, int postId)
         {
-            var liked = _context.Likeds.Find(likedId);
+            var liked = _context.Likeds.FirstOrDefault(l => l.UserLiked == userId && l.PostLiked == postId);
             if (liked == null)
             {
                 return BadRequest();
             }
 
-            var postId = liked.PostLiked;
             var post = await _context.Posts.FindAsync(postId);
             if (post == null)
             {
